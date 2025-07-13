@@ -1,0 +1,11 @@
+{
+  "name": "playwright-e2e-sample",
+  "version": "1.0.0",
+  "description": "Playwright E2E sample project",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.1"
+  }
+} 

@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Playwright
+playwright/test-results/
+playwright/.cache/
+
+# OS generated files
+.DS_Store
+
+# Logs
+*.log
+
+# Env files
+.env
+.env.* 

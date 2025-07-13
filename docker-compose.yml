@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  cypress:
+    build: ./cypress
+    working_dir: /e2e
+    volumes:
+      - ./cypress:/e2e
+    command: ["npx", "cypress", "run"]
+  playwright:
+    build: ./playwright
+    working_dir: /e2e
+    volumes:
+      - ./playwright:/e2e
+    command: ["npx", "playwright", "test"] 
