@@ -1,0 +1,172 @@
+name: Claude E2E Test Automation Assistant
+
+on:
+  # developブランチへのプルリクエストレビュー（Claudeアサイン時またはラベル付与時）
+  pull_request:
+    branches:
+      - develop
+    types: [assigned, labeled]
+  
+  # issue作成時の自動ブランチ作成・PR作成（Claudeアサイン時またはラベル付与時）
+  issues:
+    branches:
+      - develop
+    types: [assigned, labeled]
+  
+  # 手動でのClaude呼び出し
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  # 自動テストレビュージョブ（developブランチへのPR時）
+  claude-test-review:
+    if: |
+      github.event_name == 'pull_request' &&
+      github.base_ref == 'develop' &&
+      (
+        (github.event.action == 'assigned' && github.event.assignee.login == 'claude-bot') ||
+        (github.event.action == 'labeled' && github.event.label.name == 'claude-review')
+      ) &&
+      (contains(github.event.pull_request.title, 'test') || 
+       contains(github.event.pull_request.title, 'cypress') ||
+       contains(github.event.pull_request.title, 'playwright') ||
+       contains(github.event.pull_request.title, 'robotframework'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 全履歴を取得してコンテキストを提供
+
+      - name: Run Claude Test Review
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          timeout_minutes: "30"
+          # 自動テストレビュー用のプロンプト
+          system_prompt: |
+            あなたはE2Eテスト自動化の専門家です。developブランチへのプルリクエストをレビューしてください。
+            
+            ## レビュー基準
+            1. **テストの安定性**: フレイキーテストが含まれていないか
+            2. **テストデータ管理**: テストデータのクリーンアップが適切か
+            3. **エラーハンドリング**: 適切なエラーハンドリングが実装されているか
+            4. **テスト実行時間**: テスト実行時間が適切か
+            5. **複数ブラウザ対応**: 必要に応じて複数ブラウザでの動作確認
+            6. **テストレポート**: テストレポートが生成されているか
+            7. **ドキュメント**: テストに関するドキュメントが更新されているか
+            8. **コード品質**: コードの品質が保たれているか
+            9. **セキュリティ**: セキュリティ上の問題がないか
+            
+            ## レビュー形式
+            - 問題がある場合は具体的な修正提案を含めてください
+            - 良い点も含めてバランスの取れたレビューを行ってください
+            - 自動テストのベストプラクティスに基づいて評価してください
+
+  # issue作成時の自動ブランチ作成・PR作成ジョブ
+  claude-auto-branch-pr:
+    if: |
+      github.event_name == 'issues' &&
+      (
+        (github.event.action == 'assigned' && github.event.assignee.login == 'claude-bot') ||
+        (github.event.action == 'labeled' && github.event.label.name == 'claude-fix')
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "Claude Bot"
+          git config --global user.email "claude@example.com"
+
+      - name: Run Claude Auto Branch & PR Creation
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          timeout_minutes: "60"
+          # 自動ブランチ作成・PR作成用のプロンプト
+          system_prompt: |
+            あなたはE2Eテスト自動化の専門家です。issueの内容に基づいて自動的にブランチを作成し、テストを実装または修正してPRを作成してください。
+            
+            ## ブランチ命名規則
+            - feature/テストフレームワーク-機能名-詳細
+            - fix/テストフレームワーク-修正内容-詳細
+            - stabilize/テストフレームワーク-安定化内容
+            
+            ## 実装手順
+            1. issueの内容を分析して適切なブランチ名を決定
+            2. developブランチから新しいブランチを作成
+            3. 必要なテストファイルを作成または修正
+            4. テストの安定性を確保（フレイキーテスト対策）
+            5. 適切なコミットメッセージでコミット
+            6. ブランチをプッシュ
+            7. developブランチへのPRを作成
+            8. issueにPRのリンクをコメント
+            
+            ## 実装基準
+            - テストの独立性を保つ
+            - テストデータのクリーンアップを徹底
+            - 適切な待機戦略を使用
+            - エラーハンドリングを実装
+            - テストレポートの生成
+            - ドキュメントの更新
+
+  # 手動Claude呼び出しジョブ（@claudeメンション時）
+  claude-manual-assistant:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && contains(github.event.issue.body, '@claude'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Manual Assistant
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          timeout_minutes: "60"
+          # 手動呼び出し用のプロンプト
+          system_prompt: |
+            あなたはE2Eテスト自動化の専門家です。ユーザーの質問や要求に応じて、以下の分野でサポートを提供してください：
+            
+            ## サポート分野
+            1. **テスト設計**: テストケースの設計と実装
+            2. **フレイキーテスト対策**: テストの安定化
+            3. **ブランチ戦略**: ブランチ命名規則とワークフロー
+            4. **CI/CD統合**: 継続的テスト実行の設定
+            5. **テスト最適化**: 実行時間とリソースの最適化
+            6. **トラブルシューティング**: テスト実行時の問題解決
+            
+            ## 回答形式
+            - 具体的で実装可能な提案を提供
+            - コード例を含める
+            - ベストプラクティスに基づく推奨事項
+            - 必要に応じて複数の選択肢を提示
