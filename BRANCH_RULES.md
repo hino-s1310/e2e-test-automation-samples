@@ -37,12 +37,11 @@
 ### 作業ブランチ
 
 #### 機能ブランチ (`feature/`)
-- **命名規則**: `feature/テストフレームワーク-機能名-詳細`
+- **命名規則**: `feature/テストフレームワーク-詳細`
 - **例**: 
-  - `feature/cypress-login-e2e-test`
-  - `feature/playwright-api-integration-test`
-  - `feature/robotframework-page-object-pattern`
-  - `feature/multi-browser-cross-platform-test`
+  - `feature/cypress-add-test`
+  - `feature/playwright-delete-login-test`
+  - `feature/robotframework-refactor-test`
 - **作成元**: `develop`
 - **マージ先**: `develop`
 - **削除**: マージ後
