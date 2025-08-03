@@ -1,0 +1,41 @@
+# Robot Framework outputs
+log.html
+report.html
+output.xml
+selenium-screenshot-*.png
+selenium-log-*.txt
+
+# Results directory
+results/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Chrome driver
+chromedriver
+chromedriver.exe
+
+# Test artifacts
+*.log
+*.xml
+*.html 

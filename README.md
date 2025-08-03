@@ -35,9 +35,30 @@ docker build -t playwright-e2e .
 docker run --rm playwright-e2e
 ```
 
-### 4. GitHub Actionsによる自動テスト
+#### Robot Framework
+```bash
+cd robotframework
+# Dockerイメージのビルド
+docker build -t robotframework-e2e .
+# テストの実行
+docker run --rm robotframework-e2e
+```
 
-- `.github/workflows/` ディレクトリにCypress/Playwright用のワークフローファイルを配置してください。
+### 4. docker-composeを使った一括実行
+
+```bash
+# すべてのテストフレームワークを実行
+docker-compose up
+
+# 特定のフレームワークのみ実行
+docker-compose run --rm cypress
+docker-compose run --rm playwright
+docker-compose run --rm robotframework
+```
+
+### 5. GitHub Actionsによる自動テスト
+
+- `.github/workflows/` ディレクトリにCypress/Playwright/Robot Framework用のワークフローファイルを配置してください。
 - プッシュやプルリクエスト時に自動でテストが実行されます。
 
 #### 例: GitHub Actions ワークフロー（Cypress）
@@ -72,6 +93,29 @@ jobs:
         run: npx playwright test
 ```
 
+#### 例: GitHub Actions ワークフロー（Robot Framework）
+```yaml
+name: Robot Framework Tests
+on: [push, pull_request]
+jobs:
+  robot-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd robotframework
+          pip install -r requirements.txt
+      - name: Run Robot Framework tests
+        run: |
+          cd robotframework
+          robot tests/
+```
+
 ---
 
 詳細なセットアップやカスタマイズ方法は各ディレクトリのREADMEや公式ドキュメントを参照してください。
@@ -100,7 +144,7 @@ jobs:
     - refactor: リファクタリング（機能追加・バグ修正を含まない）
     - test: テスト追加・修正
     - chore: ビルドや補助ツール、ライブラリの変更
-- **scope**: 変更範囲（任意、例: cypress, playwright, README など）
+- **scope**: 変更範囲（任意、例: cypress, playwright, robotframework, README など）
 - **subject**: 変更内容の要約（50文字以内、文頭は小文字、句読点不要）
 - **body**: 変更理由や背景（必要に応じて、空行で区切る）
 - **footer**: 関連issueや注意事項（必要に応じて）
@@ -108,7 +152,7 @@ jobs:
 #### 例
 ```
 feat(cypress): サンプルテストケースを追加
-
+feat(robotframework): ページオブジェクトパターンのサンプルを追加
 docs(README): コミットメッセージルールを追記
 fix(playwright): テスト失敗時のエラー処理を修正
 ```

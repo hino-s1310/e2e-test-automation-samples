@@ -11,4 +11,10 @@ services:
     working_dir: /e2e
     volumes:
       - ./playwright:/e2e
-    command: ["npx", "playwright", "test"] 
+    command: ["npx", "playwright", "test"]
+  robotframework:
+    build: ./robotframework
+    working_dir: /e2e
+    volumes:
+      - ./robotframework:/e2e
+    command: ["robot", "tests/"] 
