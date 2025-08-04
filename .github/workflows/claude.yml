@@ -29,12 +29,12 @@ jobs:
       github.base_ref == 'develop' &&
       (
         (github.event.action == 'assigned' && github.event.assignee.login == 'claude-bot') ||
-        (github.event.action == 'labeled' && github.event.label.name == 'claude-review')
-      ) &&
-      (contains(github.event.pull_request.title, 'test') || 
-       contains(github.event.pull_request.title, 'cypress') ||
-       contains(github.event.pull_request.title, 'playwright') ||
-       contains(github.event.pull_request.title, 'robotframework'))
+        (github.event.action == 'labeled' && github.event.label.name == 'claude-review') ||
+        (contains(github.event.pull_request.title, 'test') || 
+         contains(github.event.pull_request.title, 'cypress') ||
+         contains(github.event.pull_request.title, 'playwright') ||
+         contains(github.event.pull_request.title, 'robotframework'))
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
