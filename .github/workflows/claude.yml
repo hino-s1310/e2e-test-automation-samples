@@ -52,9 +52,10 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           timeout_minutes: "30"
-          trigger_phrase: "@claude"
-          label_trigger: "claude-review"
-          assignee_trigger: "claude-bot"
+          #trigger_phrase: "@claude"
+          #label_trigger: "claude-review"
+          #assignee_trigger: "claude-bot"
+          mode: "pr"
           # 自動テストレビュー用のプロンプト
           custom_instructions: |
             あなたはE2Eテスト自動化の専門家です。developブランチへのプルリクエストをレビューしてください。
@@ -105,9 +106,10 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           timeout_minutes: "60"
-          trigger_phrase: "@claude"
-          label_trigger: "claude-fix"
-          assignee_trigger: "claude-bot"
+          #trigger_phrase: "@claude"
+          #label_trigger: "claude-fix"
+          #assignee_trigger: "claude-bot"
+          mode: "issue"
           # 自動ブランチ作成・PR作成用のプロンプト
           custom_instructions: |
             あなたはE2Eテスト自動化の専門家です。issueの内容に基づいて自動的にブランチを作成し、テストを実装または修正してPRを作成してください。
@@ -159,7 +161,8 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           timeout_minutes: "60"
-          trigger_phrase: "@claude"
+          mode: "comment"
+          #trigger_phrase: "@claude"
           # 手動呼び出し用のプロンプト
           custom_instructions: |
             あなたはE2Eテスト自動化の専門家です。ユーザーの質問や要求に応じて、以下の分野でサポートを提供してください：
