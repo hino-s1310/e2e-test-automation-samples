@@ -36,6 +36,6 @@ export class MypagePage extends BasePage {
 
     // ページが完全に読み込まれるまで待機
     async waitForPageLoad(): Promise<void> {
-        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForLoadState('domcontentloaded');
     }
 }
