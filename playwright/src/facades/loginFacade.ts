@@ -6,7 +6,7 @@ import { LoginPageBuilder } from "../builders/loginPageBuilder";
 import { MypagePageBuilder } from "../builders/mypagePageBuilder";
 import { MypagePage } from "../pages/mypagePage";
 
-export class LoginFacades {
+export class LoginFacade {
     private loginPageBuilder: LoginPageBuilder;
     private mypagePageBuilder: MypagePageBuilder;
 
@@ -25,13 +25,22 @@ export class LoginFacades {
     }
 
     // ユーザー情報の検証のみ
-    async validateUserInfo(username: string, email: string): Promise<boolean> {
-        return await this.mypagePageBuilder
-            .waitForPageLoad()
-            .ensureUsernameVisible()
-            .ensureEmailVisible()
-            .validateUsername(username)
-            .validateEmail(email)
-            .validate();
+    async validateUserInfo(username: string, email: string): Promise<void> {
+        try {
+            const isValid = await this.mypagePageBuilder
+                .waitForPageLoad()
+                .ensureUsernameVisible()
+                .ensureEmailVisible()
+                .validateUsername(username)
+                .validateEmail(email)
+                .validate();
+            
+            if (!isValid) {
+                throw new Error(`User info validation failed for user: ${username}`);
+            }
+        } catch (error) {
+            console.error('Validation error:', error);
+            throw error;
+        }
     }
 }

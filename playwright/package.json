@@ -3,9 +3,25 @@
   "version": "1.0.0",
   "description": "Playwright E2E sample project",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "report:open": "playwright show-report playwright-report/index.html",
+    "install:browsers": "playwright install",
+    "install:chromium": "playwright install chromium",
+    "install:firefox": "playwright install firefox",
+    "install:webkit": "playwright install webkit"
   },
   "devDependencies": {
-    "@playwright/test": "^1.44.1"
-  }
+    "@playwright/test": "^1.44.1",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.7.1"
 } 
