@@ -25,7 +25,11 @@ export class MypagePageBuilder {
     validateUsername(expectedUsername: string): MypagePageBuilder {
         this.validations.push(async () => {
             const actualUsername = await this.mypagePage.getUsername();
-            return actualUsername === expectedUsername;
+            const isMatch = actualUsername === expectedUsername;
+            if (!isMatch) {
+                console.error(`Username validation failed. Expected: "${expectedUsername}", Actual: "${actualUsername}"`);
+            }
+            return isMatch;
         });
         return this;
     }
@@ -34,7 +38,11 @@ export class MypagePageBuilder {
     validateEmail(expectedEmail: string): MypagePageBuilder {
         this.validations.push(async () => {
             const actualEmail = await this.mypagePage.getEmail();
-            return actualEmail === expectedEmail;
+            const isMatch = actualEmail === expectedEmail;
+            if (!isMatch) {
+                console.error(`Email validation failed. Expected: "${expectedEmail}", Actual: "${actualEmail}"`);
+            }
+            return isMatch;
         });
         return this;
     }

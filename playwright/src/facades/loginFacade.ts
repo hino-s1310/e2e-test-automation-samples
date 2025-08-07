@@ -25,13 +25,22 @@ export class LoginFacade {
     }
 
     // ユーザー情報の検証のみ
-    async validateUserInfo(username: string, email: string): Promise<boolean> {
-        return await this.mypagePageBuilder
-            .waitForPageLoad()
-            .ensureUsernameVisible()
-            .ensureEmailVisible()
-            .validateUsername(username)
-            .validateEmail(email)
-            .validate();
+    async validateUserInfo(username: string, email: string): Promise<void> {
+        try {
+            const isValid = await this.mypagePageBuilder
+                .waitForPageLoad()
+                .ensureUsernameVisible()
+                .ensureEmailVisible()
+                .validateUsername(username)
+                .validateEmail(email)
+                .validate();
+            
+            if (!isValid) {
+                throw new Error(`User info validation failed for user: ${username}`);
+            }
+        } catch (error) {
+            console.error('Validation error:', error);
+            throw error;
+        }
     }
 }
