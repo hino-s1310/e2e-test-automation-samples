@@ -1,9 +1,13 @@
 // Page Object Modelの基底クラス
 import { Page } from "@playwright/test";
+import { Header } from "../components/header";
 
 export class BasePage {
+    public header: Header;
+
     constructor(protected page: Page) {
         this.page = page;
+        this.header = new Header(page);
     }
 
     // ページに移動

@@ -6,7 +6,7 @@ import { LoginPageBuilder } from "../builders/loginPageBuilder";
 import { MypagePageBuilder } from "../builders/mypagePageBuilder";
 import { MypagePage } from "../pages/mypagePage";
 
-export class LoginFacades {
+export class LoginFacade {
     private loginPageBuilder: LoginPageBuilder;
     private mypagePageBuilder: MypagePageBuilder;
 

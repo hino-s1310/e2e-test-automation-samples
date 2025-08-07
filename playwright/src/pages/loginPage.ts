@@ -41,4 +41,6 @@ export class LoginPage extends BasePage {
     async isLoginButtonVisible(): Promise<boolean> {
         return await this.loginButton.isVisible();
     }
+
+
 }
