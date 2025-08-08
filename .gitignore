@@ -12,6 +12,7 @@ cypress/downloads/
 # Playwright
 playwright/test-results/
 playwright/.cache/
+playwright/plywright-report/
 
 # OS generated files
 .DS_Store
