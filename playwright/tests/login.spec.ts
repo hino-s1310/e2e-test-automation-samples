@@ -7,7 +7,7 @@ import { IndexPage } from '../src/pages/indexPage';
 import { loginUsers } from '../src/data/users';
 
 for (const user of loginUsers) { 
-    test.describe(`ユーザー${user.name}`, () => {
+    test.describe(`ユーザー${user.name}`, { tag: '@stable' }, () => {
         test.beforeEach(async ({ page }) => {
             await page.goto('https://hotel-example-site.takeyaqa.dev/ja/index.html');
         });
