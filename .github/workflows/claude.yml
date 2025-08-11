@@ -27,10 +27,8 @@ jobs:
     if: |
       github.event_name == 'pull_request' &&
       github.base_ref == 'develop' &&
-      (
-        (github.event.action == 'assigned' && github.event.assignee.login == 'claude-bot') ||
-        (github.event.action == 'labeled' && github.event.label.name == 'claude-review') ||
-      )
+      (github.event.action == 'assigned' && github.event.assignee.login == 'claude-bot') ||
+      (github.event.action == 'labeled' && github.event.label.name == 'claude-review')
     runs-on: ubuntu-latest
     permissions:
       contents: read
