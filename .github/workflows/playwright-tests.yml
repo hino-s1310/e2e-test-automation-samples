@@ -1,0 +1,43 @@
+name: Playwright Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types: [labeled]
+
+jobs:
+  # PR作成時の自動テスト
+  playwright-test:
+    if: |
+      github.event_name == 'pull_request' &&
+      github.base_ref == 'develop' &&
+      (github.event.action == 'labeled' && github.event.label.name == 'playwright-tests')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        working-directory: ./playwright
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Install Playwright Browsers
+        working-directory: ./playwright
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        working-directory: ./playwright
+        run: pnpm exec playwright test --reporter=dot
