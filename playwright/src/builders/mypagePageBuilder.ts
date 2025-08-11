@@ -2,10 +2,11 @@
 // Fluent Interfaceを実現し、ユーザー情報の検証を管理
 
 import { MypagePage } from "../pages/mypagePage";
+import { expect } from "@playwright/test";
 
 export class MypagePageBuilder {
     private actions: (() => Promise<void>)[] = [];
-    private validations: (() => Promise<boolean>)[] = [];
+    private validations: (() => Promise<void>)[] = [];
 
     constructor(private mypagePage: MypagePage) {}
 
@@ -25,11 +26,7 @@ export class MypagePageBuilder {
     validateUsername(expectedUsername: string): MypagePageBuilder {
         this.validations.push(async () => {
             const actualUsername = await this.mypagePage.getUsername();
-            const isMatch = actualUsername === expectedUsername;
-            if (!isMatch) {
-                console.error(`Username validation failed. Expected: "${expectedUsername}", Actual: "${actualUsername}"`);
-            }
-            return isMatch;
+            await expect(actualUsername).toHaveText(expectedUsername);
         });
         return this;
     }
@@ -38,11 +35,7 @@ export class MypagePageBuilder {
     validateEmail(expectedEmail: string): MypagePageBuilder {
         this.validations.push(async () => {
             const actualEmail = await this.mypagePage.getEmail();
-            const isMatch = actualEmail === expectedEmail;
-            if (!isMatch) {
-                console.error(`Email validation failed. Expected: "${expectedEmail}", Actual: "${actualEmail}"`);
-            }
-            return isMatch;
+            await expect(actualEmail).toHaveText(expectedEmail);
         });
         return this;
     }
@@ -51,9 +44,7 @@ export class MypagePageBuilder {
     ensureUsernameVisible(): MypagePageBuilder {
         this.actions.push(async () => {
             const isVisible = await this.mypagePage.isUsernameVisible();
-            if (!isVisible) {
-                throw new Error('Username is not visible');
-            }
+            await expect(isVisible).toBe(true);
         });
         return this;
     }
@@ -62,9 +53,7 @@ export class MypagePageBuilder {
     ensureEmailVisible(): MypagePageBuilder {
         this.actions.push(async () => {
             const isVisible = await this.mypagePage.isEmailVisible();
-            if (!isVisible) {
-                throw new Error('Email is not visible');
-            }
+            await expect(isVisible).toBe(true);
         });
         return this;
     }
@@ -85,14 +74,10 @@ export class MypagePageBuilder {
     }
 
     // すべての検証を実行
-    async validate(): Promise<boolean> {
+    async validate(): Promise<void> {
         for (const validation of this.validations) {
-            const result = await validation();
-            if (!result) {
-                return false;
-            }
+            await validation();
         }
-        return true;
     }
 
     // アクションと検証をクリア（再利用時）

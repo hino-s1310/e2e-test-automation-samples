@@ -15,13 +15,13 @@ export class MypagePage extends BasePage {
     }
 
     // ユーザー名を取得
-    async getUsername(): Promise<string> {
-        return await this.username.textContent() || '';
+    async getUsername(): Promise<Locator> {
+        return await this.username;
     }
 
     // メールアドレスを取得
-    async getEmail(): Promise<string> {
-        return await this.email.textContent() || '';
+    async getEmail(): Promise<Locator> {
+        return await this.email;
     }
 
     // ユーザー名が表示されているか確認
@@ -32,10 +32,5 @@ export class MypagePage extends BasePage {
     // メールアドレスが表示されているか確認
     async isEmailVisible(): Promise<boolean> {
         return await this.email.isVisible();
-    }
-
-    // ページが完全に読み込まれるまで待機
-    async waitForPageLoad(): Promise<void> {
-        await this.page.waitForLoadState('domcontentloaded');
     }
 }

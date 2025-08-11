@@ -24,4 +24,9 @@ export class BasePage {
     async getPageUrl() {
         return await this.page.url();
     }
+
+    // ページが完全に読み込まれるまで待機
+    async waitForPageLoad(): Promise<void> {
+        await this.page.waitForLoadState('domcontentloaded');
+    }
 }
