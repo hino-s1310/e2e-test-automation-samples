@@ -31,10 +31,13 @@ jobs:
           version: 8
 
       - name: Install dependencies
+        working-directory: ./playwright
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
+        working-directory: ./playwright
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
+        working-directory: ./playwright
         run: pnpm exec playwright test --reporter=dot
