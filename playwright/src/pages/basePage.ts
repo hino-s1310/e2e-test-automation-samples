@@ -29,4 +29,15 @@ export class BasePage {
     async waitForPageLoad(): Promise<void> {
         await this.page.waitForLoadState('domcontentloaded');
     }
+
+    // ページインスタンスを更新
+    updatePage(newPage: Page): void {
+        (this as any).page = newPage;
+        this.header.updatePage(newPage);
+    }
+
+    // ページインスタンスを取得
+    getPage(): Page {
+        return this.page;
+    }
 }
