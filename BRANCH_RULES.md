@@ -1,6 +1,8 @@
 # ブランチルール - E2Eテスト自動化プロジェクト
 
-本プロジェクトでは、E2Eテスト自動化の特性を考慮した効率的な開発と品質管理のため、以下のブランチ戦略を採用します。
+本プロジェクトでは、**Playwright**を中心としたE2Eテスト自動化の特性を考慮した効率的な開発と品質管理のため、以下のブランチ戦略を採用します。
+
+> **注意**: 本プロジェクトはPlaywrightフォーカスに再構築されており、CypressやRobot Frameworkのサンプルコードは優先度を下げています。
 
 ## 自動テストプロジェクトの特性
 
@@ -39,9 +41,9 @@
 #### 機能ブランチ (`feature/`)
 - **命名規則**: `feature/テストフレームワーク-詳細`
 - **例**: 
-  - `feature/cypress-add-test`
   - `feature/playwright-delete-login-test`
-  - `feature/robotframework-refactor-test`
+  - `feature/playwright-api-integration-test`
+  - `feature/playwright-performance-test`
 - **作成元**: `develop`
 - **マージ先**: `develop`
 - **削除**: マージ後
@@ -52,9 +54,7 @@
 #### 修正ブランチ (`fix/`)
 - **命名規則**: `fix/テストフレームワーク-修正内容-詳細`
 - **例**:
-  - `fix/cypress-timeout-flaky-test`
   - `fix/playwright-chrome-version-compatibility`
-  - `fix/robotframework-selenium-webdriver-issue`
   - `fix/test-data-cleanup-race-condition`
 - **作成元**: `develop`
 - **マージ先**: `develop`
@@ -65,9 +65,7 @@
 #### テスト安定化ブランチ (`stabilize/`)
 - **命名規則**: `stabilize/テストフレームワーク-安定化内容`
 - **例**:
-  - `stabilize/cypress-flaky-login-tests`
   - `stabilize/playwright-network-timeout-issues`
-  - `stabilize/robotframework-element-wait-strategies`
 - **作成元**: `develop`
 - **マージ先**: `develop`
 - **削除**: マージ後
@@ -75,6 +73,21 @@
   - フレイキーテストの安定化
   - テスト実行時間の最適化
   - エラーハンドリングの改善
+
+#### リファクタリングブランチ (`refactor/`)
+- **命名規則**: `refactor/テストフレームワーク-リファクタリング内容-詳細`
+- **例**:
+  - `refactor/playwright-page-object-pattern-improvement`
+  - `refactor/playwright-focus-portfolio-restructure`
+  - `refactor/test-framework-architecture-redesign`
+- **作成元**: `develop`
+- **マージ先**: `develop`
+- **削除**: マージ後
+- **特別要件**: 
+  - テストコードの品質向上
+  - アーキテクチャの改善
+  - メンテナンス性の向上
+  - 既存テストの動作保証
 
 ## 自動テスト特有のブランチ作成・マージフロー
 
@@ -84,11 +97,11 @@
 # 1. developブランチから機能ブランチを作成
 git checkout develop
 git pull origin develop
-git checkout -b feature/cypress-login-e2e-test
+git checkout -b feature/playwright-login-e2e-test
 
 # 2. テスト開発・コミット
 git add .
-git commit -m "feat(cypress): ログイン機能のE2Eテストを追加
+git commit -m "feat(playwright): ログイン機能のE2Eテストを追加
 
 - ユーザーログインフローをテスト
 - エラーケースのテストを追加
@@ -114,19 +127,19 @@ git push origin feature/cypress-login-e2e-test
 # 1. developから安定化ブランチを作成
 git checkout develop
 git pull origin develop
-git checkout -b stabilize/cypress-flaky-login-tests
+git checkout -b stabilize/playwright-flaky-login-tests
 
 # 2. フレイキーテストの調査と修正
 # テストの安定性を向上させる修正を実施
 
 # 3. 複数回のテスト実行で安定性確認
 for i in {1..5}; do
-  npm run test:cypress
+  npm run test:playwright
 done
 
 # 4. コミット・プッシュ
 git add .
-git commit -m "stabilize(cypress): ログインテストの安定性を向上
+git commit -m "stabilize(playwright): ログインテストの安定性を向上
 
 - 要素待機戦略を改善
 - テストデータのクリーンアップを強化
@@ -137,17 +150,49 @@ git push origin stabilize/cypress-flaky-login-tests
 # 5. プルリクエスト作成・レビュー・マージ
 ```
 
-### 3. リリースフロー（develop → main）
+### 3. リファクタリングフロー
+
+```bash
+# 1. developからリファクタリングブランチを作成
+git checkout develop
+git pull origin develop
+git checkout -b refactor/playwright-focus-portfolio-restructure
+
+# 2. リファクタリング実施
+# テストコードの品質向上とアーキテクチャ改善
+
+# 3. 既存テストの動作確認
+npm run test:playwright
+# 複数回実行して安定性確認
+for i in {1..3}; do
+  npm run test:playwright
+done
+
+# 4. コミット・プッシュ
+git add .
+git commit -m "refactor(playwright): ポートフォリオをPlaywrightフォーカスに再構築
+
+- Cypress/RobotFrameworkの詳細説明を縮小
+- Playwrightのテスト実行と自動化システムに焦点
+- 実用的なE2Eテスト自動化の深掘りを優先
+- ポートフォリオの専門性を向上"
+
+git push origin refactor/playwright-focus-portfolio-restructure
+
+# 5. プルリクエスト作成・レビュー・マージ
+```
+
+### 4. リリースフロー（develop → main）
 
 ```bash
 # 1. developブランチの最新化
 git checkout develop
 git pull origin develop
 
-# 2. 全テストフレームワークでの回帰テスト実行
-npm run test:all
+# 2. Playwrightテストでの回帰テスト実行
+npm run test:playwright
 # または
-docker-compose up
+docker-compose run --rm playwright
 
 # 3. テストレポートの確認
 # テスト結果とカバレッジを確認
@@ -175,24 +220,21 @@ docker-compose up
 - `feat`: 新機能追加
 - `fix`: バグ修正
 - `stabilize`: テスト安定化
-- `refactor`: リファクタリング
+- `refactor`: リファクタリング（テストコード品質向上・アーキテクチャ改善）
 - `test`: テスト追加・修正
 - `docs`: ドキュメントのみの変更
 - `chore`: ビルド・ツール変更
 - `ci`: CI/CD関連
 
 ### Scope の例（テストフレームワーク特化）
-- `cypress`: Cypress関連
 - `playwright`: Playwright関連
-- `robotframework`: Robot Framework関連
-- `selenium`: Selenium関連
 - `test-utils`: テストユーティリティ
 - `test-data`: テストデータ
 - `ci`: CI/CD関連
 
 ### 例
 ```
-feat(cypress): ログイン機能のE2Eテストを追加
+feat(playwright): ログイン機能のE2Eテストを追加
 
 - ユーザーログインフローをテスト
 - エラーケースのテストを追加
@@ -213,6 +255,17 @@ stabilize(playwright): ネットワークタイムアウト問題を修正
 Fixes #456
 ```
 
+```
+refactor(playwright): ポートフォリオをPlaywrightフォーカスに再構築
+
+- Cypress/RobotFrameworkの詳細説明を縮小
+- Playwrightのテスト実行と自動化システムに焦点
+- 実用的なE2Eテスト自動化の深掘りを優先
+- ポートフォリオの専門性を向上
+
+Closes #789
+```
+
 ## 自動テスト特有の保護ブランチ設定
 
 ### main ブランチ
@@ -220,9 +273,7 @@ Fixes #456
 - ✅ Require approvals (1)
 - ✅ Dismiss stale PR approvals when new commits are pushed
 - ✅ **Require status checks to pass before merging**
-  - cypress-tests
   - playwright-tests
-  - robotframework-tests
 - ✅ Require branches to be up to date before merging
 - ✅ Include administrators
 - ✅ **Require test stability checks**
@@ -237,16 +288,19 @@ Fixes #456
 ## 自動テスト特有のブランチ命名チェックリスト
 
 ### ✅ 良い例
-- `feature/cypress-login-e2e-test`
+- `feature/playwright-login-e2e-test`
 - `feature/playwright-api-integration-test`
-- `feature/robotframework-page-object-pattern`
-- `fix/cypress-timeout-flaky-test`
+- `feature/playwright-performance-test`
+- `fix/playwright-timeout-flaky-test`
 - `stabilize/playwright-network-timeout-issues`
+- `refactor/playwright-page-object-pattern-improvement`
+- `refactor/playwright-focus-portfolio-restructure`
 
 ### ❌ 悪い例
 - `feature/new-test`
 - `fix/bug`
 - `stabilize/fix`
+- `refactor/update`
 
 ## 自動テスト特有のブランチ管理コマンド
 
@@ -260,12 +314,15 @@ git branch | grep "fix/"
 
 # 安定化ブランチ
 git branch | grep "stabilize/"
+
+# リファクタリングブランチ
+git branch | grep "refactor/"
 ```
 
 ### テストブランチのクリーンアップ
 ```bash
 # マージ済みテストブランチの削除
-git branch --merged | grep -E "(feature|fix|stabilize)/" | xargs -n 1 git branch -d
+git branch --merged | grep -E "(feature|fix|stabilize|refactor)/" | xargs -n 1 git branch -d
 
 # リモートブランチの削除
 git push origin --delete <branch-name>
@@ -288,12 +345,16 @@ git pull origin <branch-name>
 ```bash
 # テストの安定性を確認
 for i in {1..5}; do
-  npm run test:cypress
+  npm run test:playwright
 done
 
 # 安定化ブランチを作成
-git checkout -b stabilize/cypress-flaky-tests
+git checkout -b stabilize/playwright-flaky-tests
 # 修正を実施
+
+# リファクタリングブランチを作成
+git checkout -b refactor/playwright-architecture-improvement
+# アーキテクチャ改善を実施
 ```
 
 #### 2. テスト環境の不整合
