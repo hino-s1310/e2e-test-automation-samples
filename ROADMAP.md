@@ -10,20 +10,18 @@ CypressやRobot Frameworkのサンプルコード集は優先度を下げ、Play
 ### Phase 1: Playwright基盤の強化（現在進行中）
 
 #### 1.1 テスト安定性の向上
-- [x] ページオブジェクトパターンの実装
-- [x] ファサードパターンの実装
-- [x] ビルダーパターンの実装
-- [x] ポップアップ・ページ切り替え処理の実装
-- [ ] フレイキーテストの安定化
+- [x] ページオブジェクトパターンの実装（BasePage, PlansPage, ReservationPage, ConfirmPage）
+- [x] ファサードパターンの実装（ReserveFacade, LoginFacade, SignupFacade）
+- [x] ビルダーパターンの実装（PlansPageBuilder, ReservationPageBuilder, ConfirmPageBuilder）
+- [x] ポップアップ・ページ切り替え処理の実装（waitForEvent, updatePage）
 - [ ] テストデータ管理の最適化
 - [ ] エラーハンドリングの強化
 
 #### 1.2 テスト実行環境の整備
-- [x] Docker環境の構築
-- [x] GitHub Actionsの設定
+- [x] Docker環境の構築（playwright:latest, ヘッドレス実行対応）
+- [x] GitHub Actionsの設定（Node.js 18, Playwright自動インストール）
 - [ ] テストレポートの改善
 - [ ] テスト実行時間の最適化
-- [ ] 並列実行の実装
 
 ### Phase 2: 高度なテスト自動化機能
 
@@ -36,28 +34,23 @@ CypressやRobot Frameworkのサンプルコード集は優先度を下げ、Play
 #### 2.2 テスト実行の自動化
 - [ ] スケジュール実行の実装
 - [ ] 失敗時の自動リトライ
-- [ ] テスト結果の通知機能
-- [ ] パフォーマンステストの統合
+- [ ] テスト結果の自動通知実装
 
 #### 2.3 テスト品質の向上
-- [ ] テストカバレッジの測定
-- [ ] テストメトリクスの収集
-- [ ] テストの保守性向上
-- [ ] テストドキュメントの自動生成
+- [ ] テストメトリクスの収集（実行時間、成功率、失敗率）
+- [ ] テストの保守性向上（コード品質、ドキュメント整備）
+- [ ] テストドキュメントの自動生成（JSDoc、Markdown出力）
 
 ### Phase 3: 実用的な自動テストシステム
 
 #### 3.1 CI/CD統合
 - [ ] マルチブランチ対応
-- [ ] 環境別テスト実行
 - [ ] デプロイ前テストの自動化
 - [ ] ロールバック判定の自動化
 
 #### 3.2 テスト環境管理
 - [ ] 環境構築の自動化
-- [ ] テストデータの同期
 - [ ] 環境のクリーンアップ
-- [ ] 環境の監視・アラート
 
 ## 🔄 優先度の変更
 
@@ -84,52 +77,10 @@ CypressやRobot Frameworkのサンプルコード集は優先度を下げ、Play
 - **TypeScript**: 開発言語
 - **Docker**: 環境構築
 - **GitHub Actions**: CI/CD
-- **Page Object Model**: テスト設計パターン
-
-### 補助技術
-- **Jest**: ユニットテスト
-- **ESLint**: コード品質
-- **Prettier**: コードフォーマット
-- **Husky**: Git hooks
-
-## 🎯 成功指標
-
-### 短期目標（3ヶ月）
-- [ ] テストの安定性向上（失敗率 < 5%）
-- [ ] テスト実行時間の短縮（30%改善）
-- [ ] テストカバレッジの向上（80%以上）
-
-### 中期目標（6ヶ月）
-- [ ] 完全自動化されたテストパイプライン
-- [ ] 実用的なテストレポートシステム
-- [ ] テスト環境の自動管理
-
-### 長期目標（1年）
-- [ ] エンタープライズレベルのテスト自動化システム
-- [ ] 業界標準に準拠したテスト品質
-- [ ] 他チーム・プロジェクトでの活用実績
-
-## 🤝 コントリビューション
-
-### 開発者向け
-- テストの安定性向上
-- パフォーマンスの改善
-- 新機能の提案・実装
-- ドキュメントの改善
-
-### ユーザー向け
-- フィードバックの提供
-- バグレポート
-- 機能要求
-- 使用例の共有
-
-## 📚 参考資料
-
-- [Playwright公式ドキュメント](https://playwright.dev/)
-- [Playwright Best Practices](https://playwright.dev/docs/best-practices)
-- [Page Object Model](https://playwright.dev/docs/pom)
-- [CI/CD with Playwright](https://playwright.dev/docs/ci)
-
+- **Page Object Model**: ページ要素と操作をクラス化するテスト設計パターン
+- **Component Based Model**: 再利用可能なUIコンポーネントをクラス化するパターン
+- **Facade Pattern**: 複雑なテストワークフローを単純なインターフェースで提供するパターン
+- **Page Builder Pattern**: テストアクションをチェーン可能なビルダーで構築するパターン
 ---
 
 *このロードマップは継続的に更新されます。最新の情報は[Issues](../../issues)や[Discussions](../../discussions)をご確認ください。*

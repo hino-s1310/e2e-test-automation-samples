@@ -38,38 +38,6 @@ docker-compose run --rm playwright
 - `.github/workflows/` ディレクトリにPlaywright用のワークフローファイルを配置してください。
 - プッシュやプルリクエスト時に自動でテストが実行されます。
 
-#### 例: GitHub Actions ワークフロー（Playwright）
-```yaml
-name: Playwright Tests
-on: [push, pull_request]
-jobs:
-  playwright-run:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npx playwright test
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-```
-
----
-
-詳細なセットアップやカスタマイズ方法はPlaywrightディレクトリのREADMEや公式ドキュメントを参照してください。
-
 ---
 
 ## 📋 今後のロードマップ
