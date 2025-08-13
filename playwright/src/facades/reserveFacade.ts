@@ -25,15 +25,15 @@ export class ReserveFacade {
         // プラン情報の検証（最初の実行）
         await this.plansPageBuilder
             .waitForPageLoad()
-            //.validatePlanHeader(plan.header)
-            //.validatePlanName(plan.name)
+            .validatePlanHeader(plan.header)
+            .validatePlanName(plan.name)
             .execute();
         // 前回のアクションをクリア（ビルダーはexecute後にクリアされないため）
         this.plansPageBuilder.clear();
 
         // ポップアップを待機しつつクリックを実行（レースコンディション回避）
         const [popupPage] = await Promise.all([
-            this.plansPage.getPage().waitForEvent('popup'),
+            this.plansPage.getPage().context().waitForEvent('page'),
             (async () => {
                 await this.plansPageBuilder
                     .waitForPageLoad()
@@ -44,7 +44,7 @@ export class ReserveFacade {
         ]);
 
         // ポップアップの読み込み完了を待機し、前面に表示
-        await popupPage.waitForLoadState('domcontentloaded');
+        await popupPage.waitForLoadState('load');
         await popupPage.bringToFront();
 
         // 予約ページと確認ページのインスタンスをポップアップページに切り替え
@@ -55,11 +55,12 @@ export class ReserveFacade {
         // 予約情報入力処理
         await this.reservationPageBuilder
             .waitForPageLoad()
-            //.inputCheckinDate(reservation.checkinDate)
+            .inputCheckinDate(reservation.checkinDate)
             .inputStay(reservation.stay)
             .inputGuestCount(reservation.guestCount)
             .inputConfirmOption(reservation.confirmOption)
             .validateTotalBill(reservation.totalBill)
+            .clickReserveButton()
             .execute();
 
         // 予約確認処理

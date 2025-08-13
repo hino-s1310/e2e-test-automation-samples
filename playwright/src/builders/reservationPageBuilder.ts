@@ -17,10 +17,18 @@ export class ReservationPageBuilder {
         return this;
     }
 
-    // 予約日を入力
+    // 宿泊日を入力
     inputCheckinDate(checkinDate: string): ReservationPageBuilder {
         this.actions.push(async () => {
             await this.reservationPage.inputCheckinDate(checkinDate);
+        });
+        return this;
+    }
+
+    // 今日の日付をクリック
+    clickDatePickerToday(): ReservationPageBuilder {
+        this.actions.push(async () => {
+            await this.reservationPage.clickDatePickerToday();
         });
         return this;
     }

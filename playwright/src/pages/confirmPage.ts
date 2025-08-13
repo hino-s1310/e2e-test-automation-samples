@@ -30,8 +30,11 @@ export class ConfirmPage extends BasePage {
         await this.closeButton.click();
     }
 
-    // 予約ページのインスタンスを更新
-    updatePage(newPage: any): void {
-        this.page = newPage;
+    // ページインスタンスを更新（要素のロケータも再初期化）
+    updatePage(newPage: Page): void {
+        super.updatePage(newPage);
+        this.totalBill = newPage.locator("#total-bill");
+        this.reserveButton = newPage.getByRole("button", { name: "予約する" });
+        this.closeButton = newPage.getByRole("button", { name: "閉じる" });
     }
 }
