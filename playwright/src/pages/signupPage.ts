@@ -1,5 +1,4 @@
-// マイページのページオブジェクト
-// ログイン後のユーザー情報表示ページ
+// 新規登録ページのページオブジェクト
 
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "./basePage";

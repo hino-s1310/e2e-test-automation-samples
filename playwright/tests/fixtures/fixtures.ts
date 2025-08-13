@@ -6,7 +6,10 @@ import { MypagePage } from '../../src/pages/mypagePage';
 import { SignupPage } from '../../src/pages/signupPage';
 import { LoginFacade } from '../../src/facades/loginFacade';
 import { SignupFacade } from '../../src/facades/signupFacade';
-
+import { ReservationPage } from '../../src/pages/reservationPage';
+import { PlansPage } from '../../src/pages/plansPage';
+import { ReserveFacade } from '../../src/facades/reserveFacade';
+import { ConfirmPage } from '../../src/pages/confirmPage';
 
 type MyFixtures = {
   loginPage: LoginPage;
@@ -15,6 +18,10 @@ type MyFixtures = {
   signupPage: SignupPage;
   loginFacade: LoginFacade;
   signupFacade: SignupFacade;
+  reservationPage: ReservationPage;
+  plansPage: PlansPage;
+  reserveFacade: ReserveFacade;
+  confirmPage: ConfirmPage;
 };
 
 export const test = base.extend<MyFixtures>({
@@ -36,6 +43,18 @@ export const test = base.extend<MyFixtures>({
   signupFacade: async ({ page }, use) => {
     await use(new SignupFacade(new SignupPage(page), new MypagePage(page)));
   },
+  reservationPage: async ({ page }, use) => {
+    await use(new ReservationPage(page));
+  },
+  plansPage: async ({ page }, use) => {
+    await use(new PlansPage(page));
+  },
+  reserveFacade: async ({ page }, use) => {
+    await use(new ReserveFacade(new ReservationPage(page), new PlansPage(page), new ConfirmPage(page)));
+  },
+  confirmPage: async ({ page }, use) => {
+    await use(new ConfirmPage(page));
+  }
 });
 
 export { expect } from '@playwright/test';
