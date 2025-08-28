@@ -1,4 +1,4 @@
-# e2e-test-automation-samples
+# hotel-playwright-samples
 playwrightを使ったサンプルコード集
 
 ---
